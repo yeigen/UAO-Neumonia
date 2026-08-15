@@ -213,7 +213,7 @@ El efecto del preprocesamiento y del Grad-CAM sobre una radiografía real:
 
 | CLAHE (entrada de la red) | Grad-CAM (salida explicable) |
 |---|---|
-| ![CLAHE](docs/clahe-dicom.png) | ![Heatmap](docs/heatmap-dicom.png) |
+| ![CLAHE](docs/clahe-dicom.png) | ![Heatmap](docs/heatmap-dicom-normal(2).png) |
 
 ## Acerca del modelo
 
