@@ -35,17 +35,23 @@ class FakeWidget:
 
 
 def test_save_result_csv_writes_patient_row(tmp_path):
-    path = str(tmp_path / "history.csv")
+    path = tmp_path / "history.csv"
     save_result_csv("123", "viral", 95.314, path)
-    assert Path(path).read_text().strip() == "123-viral-95.31%"
+    assert path.read_text().strip() == "123-viral-95.31%"
 
 
 def test_save_result_csv_appends_rows(tmp_path):
-    path = str(tmp_path / "history.csv")
+    path = tmp_path / "history.csv"
     save_result_csv("1", "normal", 99.0, path)
     save_result_csv("2", "bacteriana", 80.5, path)
-    lines = Path(path).read_text().strip().splitlines()
+    lines = path.read_text().strip().splitlines()
     assert lines == ["1-normal-99.00%", "2-bacteriana-80.50%"]
+
+
+def test_save_result_csv_creates_parent_folder(tmp_path):
+    path = tmp_path / "reports" / "history.csv"
+    save_result_csv("9", "viral", 70.0, path)
+    assert path.read_text().strip() == "9-viral-70.00%"
 
 
 def test_capture_window_uses_widget_geometry(monkeypatch, tmp_path):
@@ -61,12 +67,12 @@ def test_generate_pdf_report_creates_pdf(monkeypatch, tmp_path):
     install_fake_screenshot(monkeypatch)
     monkeypatch.chdir(tmp_path)
     pdf_path = generate_pdf_report(FakeWidget(), 0)
-    assert pdf_path == "Reporte0.pdf"
+    assert pdf_path == "reports/Reporte0.pdf"
     assert Path(pdf_path).read_bytes().startswith(b"%PDF")
 
 
 def test_generate_pdf_report_numbers_reports(monkeypatch, tmp_path):
     install_fake_screenshot(monkeypatch)
     monkeypatch.chdir(tmp_path)
-    assert generate_pdf_report(FakeWidget(), 3) == "Reporte3.pdf"
-    assert Path("Reporte3.jpg").exists()
+    assert generate_pdf_report(FakeWidget(), 3) == "reports/Reporte3.pdf"
+    assert Path("reports/Reporte3.jpg").exists()

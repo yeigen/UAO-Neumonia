@@ -64,8 +64,8 @@ uv run main.py
 1. Ingrese la cédula del paciente en la caja de texto.
 2. Presione **Cargar Imagen** y seleccione una radiografía (`.dcm`, `.jpeg`, `.jpg` o `.png`).
 3. Presione **Predecir**. La primera predicción tarda unos segundos mientras se carga el modelo; las siguientes son inmediatas.
-4. Presione **Guardar** para agregar la cédula, el resultado y la probabilidad a `historial.csv`.
-5. Presione **PDF** para generar `ReporteN.pdf` con una captura de la ventana.
+4. Presione **Guardar** para agregar la cédula, el resultado y la probabilidad a `reports/historial.csv`.
+5. Presione **PDF** para generar `reports/ReporteN.pdf` con una captura de la ventana.
 6. Presione **Borrar** para limpiar todos los campos y cargar un nuevo caso.
 
 ### Scripts de verificación
@@ -128,6 +128,7 @@ docker run --rm -v ./models:/app/models -v ./data:/app/data \
 UAO-Neumonia/
 ├── main.py                  Punto de entrada de la aplicación
 ├── src/
+│   ├── config.py            Constantes y rutas compartidas del proyecto
 │   ├── detector_neumonia.py Interfaz gráfica (Tkinter)
 │   ├── integrator.py        Orquesta el pipeline y retorna clase, probabilidad y heatmap
 │   ├── read_img.py          Lectura de imágenes DICOM y JPG/PNG
@@ -137,6 +138,7 @@ UAO-Neumonia/
 │   └── report.py            Historial CSV y reporte PDF por captura de ventana
 ├── test/                    Pruebas unitarias (pytest)
 ├── scripts/                 Verificación manual con imágenes reales
+├── reports/                 Historial CSV y reportes PDF generados
 ├── Dockerfile
 └── pyproject.toml           Dependencias y configuración (uv)
 ```
@@ -178,8 +180,8 @@ flowchart TD
     K --> M[Resultados en pantalla]
     L --> M
     M --> N{Accion del usuario}
-    N -- Guardar --> O[historial.csv]
-    N -- PDF --> P[ReporteN.pdf<br>captura de la ventana]
+    N -- Guardar --> O[reports/historial.csv]
+    N -- PDF --> P[reports/ReporteN.pdf<br>captura de la ventana]
     N -- Borrar --> C
 ```
 
