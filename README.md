@@ -139,6 +139,7 @@ UAO-Neumonia/
 ├── test/                    Pruebas unitarias (pytest)
 ├── scripts/                 Verificación manual con imágenes reales
 ├── reports/                 Historial CSV y reportes PDF generados
+├── design/                  Diagramas detallados del diseño del sistema
 ├── Dockerfile
 └── pyproject.toml           Dependencias y configuración (uv)
 ```
@@ -158,6 +159,8 @@ graph TD
     GC --> PRE
     GC --> LOAD
 ```
+
+Versión detallada con iconos: [design/architecture-diagram.png](design/architecture-diagram.png)
 
 ## Diagrama de proceso
 
@@ -185,6 +188,8 @@ flowchart TD
     N -- Borrar --> C
 ```
 
+Versión detallada con iconos: [design/process-diagram.png](design/process-diagram.png)
+
 ## Diagrama de datos
 
 Transformaciones que sufre la imagen a lo largo del pipeline:
@@ -201,6 +206,8 @@ flowchart LR
     F --> I[Grad-CAM<br>gradientes en conv10_thisone]
     I --> J[Heatmap JET<br>512 x 512 x 3 uint8<br>superpuesto a la radiografia]
 ```
+
+Versión detallada con iconos: [design/data-diagram.png](design/data-diagram.png)
 
 El efecto del preprocesamiento y del Grad-CAM sobre una radiografía real:
 
