@@ -135,8 +135,3 @@ dmypy.json
 /models
 /data
 *.h5
-
-# app runtime output
-historial.csv
-Reporte*.jpg
-Reporte*.pdf

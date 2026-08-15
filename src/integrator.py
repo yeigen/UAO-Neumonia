@@ -1,10 +1,9 @@
 import numpy as np
 
+from src.config import CLASS_LABELS
 from src.grad_cam import grad_cam
 from src.load_model import model_fun
 from src.preprocess_img import preprocess
-
-CLASS_LABELS = {0: "bacteriana", 1: "normal", 2: "viral"}
 
 
 def predict(array, model=None):

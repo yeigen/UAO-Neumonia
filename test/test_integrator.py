@@ -3,7 +3,8 @@ import pytest
 import tensorflow as tf
 from conftest import requires_trained_model
 
-from src.integrator import CLASS_LABELS, predict
+from src.config import CLASS_LABELS
+from src.integrator import predict
 from src.load_model import model_fun
 
 

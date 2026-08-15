@@ -2,11 +2,9 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
+from src.config import CONV_LAYER_NAME, HEATMAP_INTENSITY, IMG_SIZE
 from src.load_model import model_fun
 from src.preprocess_img import preprocess
-
-CONV_LAYER_NAME = "conv10_thisone"
-HEATMAP_INTENSITY = 0.8
 
 
 def compute_heatmap(model, batch, layer_name=CONV_LAYER_NAME):
@@ -38,5 +36,5 @@ def grad_cam(array, model=None):
     if model is None:
         model = model_fun()
     heatmap = compute_heatmap(model, preprocess(array))
-    resized_input = cv2.resize(array, (512, 512))
+    resized_input = cv2.resize(array, (IMG_SIZE, IMG_SIZE))
     return overlay_heatmap(heatmap, resized_input)

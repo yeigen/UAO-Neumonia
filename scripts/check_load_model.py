@@ -1,3 +1,4 @@
+from src.config import CONV_LAYER_NAME
 from src.load_model import model_fun
 
 
@@ -7,7 +8,7 @@ def main():
     print("input shape:", model.input_shape)
     print("output shape:", model.output_shape)
     layer_names = [layer.name for layer in model.layers]
-    print("conv10_thisone present:", "conv10_thisone" in layer_names)
+    print(f"{CONV_LAYER_NAME} present:", CONV_LAYER_NAME in layer_names)
 
 
 if __name__ == "__main__":

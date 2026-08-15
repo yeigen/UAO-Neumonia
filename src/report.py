@@ -1,10 +1,13 @@
 import csv
+from pathlib import Path
 
 from PIL import Image
 
-CSV_PATH = "historial.csv"
+from src.config import HISTORY_CSV_PATH, REPORTS_DIR
 
-def save_result_csv(patient_id, label, probability, path=CSV_PATH):
+
+def save_result_csv(patient_id, label, probability, path=HISTORY_CSV_PATH):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
     with open(path, "a", newline="") as history:
         writer = csv.writer(history, delimiter="-")
         writer.writerow([patient_id, label, f"{probability:.2f}%"])
@@ -26,8 +29,9 @@ def capture_window(widget, output_path):
 
 
 def generate_pdf_report(widget, report_id):
-    image_path = f"Reporte{report_id}.jpg"
-    pdf_path = f"Reporte{report_id}.pdf"
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    image_path = REPORTS_DIR / f"Reporte{report_id}.jpg"
+    pdf_path = REPORTS_DIR / f"Reporte{report_id}.pdf"
     capture_window(widget, image_path)
     Image.open(image_path).convert("RGB").save(pdf_path)
-    return pdf_path
+    return str(pdf_path)

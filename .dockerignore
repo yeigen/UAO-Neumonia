@@ -11,7 +11,5 @@ logs
 imgs
 pdfs
 *.h5
-historial.csv
-Reporte*.jpg
-Reporte*.pdf
+reports
 README.md
