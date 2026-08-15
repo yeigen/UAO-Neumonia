@@ -1,0 +1,17 @@
+.git
+.venv
+.vscode
+.github
+.pytest_cache
+.ruff_cache
+__pycache__
+data
+models
+logs
+imgs
+pdfs
+*.h5
+historial.csv
+Reporte*.jpg
+Reporte*.pdf
+README.md
