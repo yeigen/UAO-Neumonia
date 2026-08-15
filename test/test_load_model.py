@@ -1,14 +1,9 @@
-from pathlib import Path
-
 import numpy as np
 import pytest
 import tensorflow as tf
+from conftest import requires_trained_model
 
-from src.load_model import MODEL_PATH, model_fun
-
-requires_trained_model = pytest.mark.skipif(
-    not Path(MODEL_PATH).exists(), reason="trained model file not available"
-)
+from src.load_model import model_fun
 
 
 @pytest.fixture

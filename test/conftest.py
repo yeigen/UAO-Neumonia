@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import cv2
 import numpy as np
 import pytest
@@ -6,6 +8,12 @@ from pydicom.uid import (
     ExplicitVRLittleEndian,
     SecondaryCaptureImageStorage,
     generate_uid,
+)
+
+from src.load_model import MODEL_PATH
+
+requires_trained_model = pytest.mark.skipif(
+    not Path(MODEL_PATH).exists(), reason="trained model file not available"
 )
 
 
