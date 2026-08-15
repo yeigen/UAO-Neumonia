@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import cv2
 import numpy as np
 import pytest
@@ -10,10 +8,10 @@ from pydicom.uid import (
     generate_uid,
 )
 
-from src.load_model import MODEL_PATH
+from src.config import MODEL_PATH
 
 requires_trained_model = pytest.mark.skipif(
-    not Path(MODEL_PATH).exists(), reason="trained model file not available"
+    not MODEL_PATH.exists(), reason="trained model file not available"
 )
 
 
