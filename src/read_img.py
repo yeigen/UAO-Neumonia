@@ -6,7 +6,7 @@ from PIL import Image
 
 def scale_to_uint8(array):
     scaled = (np.maximum(array, 0) / array.max()) * 255.0
-    return np.uint8(scaled)
+    return scaled.astype(np.uint8)
 
 
 def read_dicom_file(path):
