@@ -188,7 +188,7 @@ flowchart TD
     N -- Borrar --> C
 ```
 
-Versión detallada con iconos: [design/process-diagram.png](design/process-diagram.png)
+Versión detallada con iconos e imágenes: [design/process-diagram.pdf](design/process-diagram.pdf)
 
 ## Diagrama de datos
 
@@ -207,7 +207,7 @@ flowchart LR
     I --> J[Heatmap JET<br>512 x 512 x 3 uint8<br>superpuesto a la radiografia]
 ```
 
-Versión detallada con iconos: [design/data-diagram.png](design/data-diagram.png)
+Versión detallada con iconos e imágenes: [design/data-diagram.pdf](design/data-diagram.pdf)
 
 El efecto del preprocesamiento y del Grad-CAM sobre una radiografía real:
 
