@@ -21,3 +21,9 @@ def read_jpg_file(path):
     image_array = np.asarray(cv2.imread(path))
     display_image = Image.fromarray(image_array)
     return scale_to_uint8(image_array.astype(float)), display_image
+
+
+def read_image_file(path):
+    if path.lower().endswith(".dcm"):
+        return read_dicom_file(path)
+    return read_jpg_file(path)
