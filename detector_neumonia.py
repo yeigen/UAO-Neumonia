@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from tkinter import *
-from tkinter import ttk, font, filedialog
+from tkinter import END, StringVar, Text, Tk, filedialog, font, ttk
 
 from tkinter.messagebox import askokcancel, showinfo, WARNING
 from PIL import ImageTk, Image
