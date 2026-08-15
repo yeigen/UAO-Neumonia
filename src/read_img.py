@@ -3,6 +3,7 @@ import numpy as np
 import pydicom
 from PIL import Image
 
+
 def scale_to_uint8(array):
     scaled = (np.maximum(array, 0) / array.max()) * 255.0
     return scaled.astype(np.uint8)
