@@ -12,6 +12,7 @@ tf.compat.v1.disable_eager_execution()
 tf.compat.v1.experimental.output_all_intermediates(True)
 import cv2
 
+from src.load_model import model_fun
 from src.preprocess_img import preprocess
 from src.read_img import read_dicom_file
 

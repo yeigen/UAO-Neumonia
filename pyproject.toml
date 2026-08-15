@@ -22,3 +22,9 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["test"]
 pythonpath = ["."]
+filterwarnings = [
+    "ignore:__array__ implementation doesn't accept a copy keyword:DeprecationWarning",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"src/load_model.py" = ["E402"]
