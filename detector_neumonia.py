@@ -2,17 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from tkinter import *
-from tkinter import ttk, font, filedialog, Entry
+from tkinter import ttk, font, filedialog
 
 from tkinter.messagebox import askokcancel, showinfo, WARNING
-import getpass
 from PIL import ImageTk, Image
 import csv
-import pyautogui
 import tkcap
-import img2pdf
 import numpy as np
-import time
 tf.compat.v1.disable_eager_execution()
 tf.compat.v1.experimental.output_all_intermediates(True)
 import cv2
