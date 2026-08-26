@@ -14,5 +14,5 @@ CLAHE_CLIP_LIMIT = 2.0   #Mejora de contraste
 CLAHE_TILE_GRID_SIZE = (4, 4)  #regiones utilizadas por CLAHE
 
 CLASS_LABELS = {0: "bacteriana", 1: "normal", 2: "viral"}  #Clases
-CONV_LAYER_NAME = "conv10_thisone"  #Capa convolucional genradora de mapas para la activación del modelo
+CONV_LAYER_NAME = "conv10_thisone"  #Capa convolucional generadora de mapas para la activación del modelo
 HEATMAP_INTENSITY = 0.8   #Intensidad del heatmap
