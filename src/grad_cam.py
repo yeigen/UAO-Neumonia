@@ -8,19 +8,19 @@ from src.preprocess_img import preprocess
 
 
 def compute_heatmap(model, batch, layer_name=CONV_LAYER_NAME):
-    grad_model = tf.keras.Model(
-        model.inputs, [model.get_layer(layer_name).output, *model.outputs]
+    grad_model = tf.keras.Model(                                               #Crear el modelo grad
+        model.inputs, [model.get_layer(layer_name).output, *model.outputs]       #Entrada del modelo original, salida de la capa convolucional y la salida del modelo
     )
-    with tf.GradientTape() as tape:
-        conv_output, predictions = grad_model([batch])
-        class_channel = predictions[:, tf.argmax(predictions[0])]
-    grads = tape.gradient(class_channel, conv_output)
-    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
-    heatmap = tf.squeeze(conv_output[0] @ pooled_grads[:, tf.newaxis])
-    heatmap = tf.maximum(heatmap, 0)
-    max_value = tf.reduce_max(heatmap)
+    with tf.GradientTape() as tape:              #Registrar operaciones para calcular gradientes para saber cuandto influye cada caractristica de la capa en la predicción
+        conv_output, predictions = grad_model([batch])        #Pasar la imagen por el modelo
+        class_channel = predictions[:, tf.argmax(predictions[0])]    #Prediccion de la clase que el modelo considera mas probable 
+    grads = tape.gradient(class_channel, conv_output)        # Calcular gradientes para saber que caracteristicas fue relevantes para la predicción 
+    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))       # Obtener valores promedio de los gradientes para la importancia de los mapas
+    heatmap = tf.squeeze(conv_output[0] @ pooled_grads[:, tf.newaxis])   #Agregar dimensiones para poder multiplicar y eliminar dimensiones de tamaño 1 para tener imagen, combina las activaciones con los pesos 
+    heatmap = tf.maximum(heatmap, 0)  #Quitar valores negativos 
+    max_value = tf.reduce_max(heatmap)   #Maximo valor dentro de heatmap
     if max_value > 0:
-        heatmap = heatmap / max_value
+        heatmap = heatmap / max_value    #Normalización del heatmap [0 - 1]
     return heatmap.numpy()
 
 
