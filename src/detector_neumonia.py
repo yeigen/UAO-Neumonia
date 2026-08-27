@@ -1,3 +1,5 @@
+"""Interfaz gráfica en Tkinter de la herramienta."""
+
 from tkinter import END, StringVar, Text, Tk, filedialog, font, ttk
 from tkinter.messagebox import WARNING, askokcancel, showinfo
 
@@ -9,8 +11,11 @@ from src.read_img import read_image_file
 from src.report import generate_pdf_report, save_result_csv
 
 
-class App:                      #Interfaz
-    def __init__(self):            #Construtor con configuración de la ventana 
+class App:
+    """Ventana principal de la aplicación."""
+
+    def __init__(self):
+        """Construye la ventana y todos sus componentes."""
         self.root = Tk()
         self.root.title("Herramienta para la detección rápida de neumonía")
         self.root.geometry("815x560")
@@ -79,7 +84,8 @@ class App:                      #Interfaz
         self.report_id = 0
 
     def load_img_file(self):
-        filepath = filedialog.askopenfilename(    #Abre el explorador de archivos 
+        """Abre el explorador, carga la imagen y habilita el botón de predecir."""
+        filepath = filedialog.askopenfilename(    #Abre el explorador de archivos
             initialdir="/",
             title="Select image",
             filetypes=(
@@ -90,14 +96,16 @@ class App:                      #Interfaz
             ),
         )
         if filepath:
-            self.array, preview = read_image_file(filepath)     #Obtiene el array para el modelo y la imagen Para mostrar en al interfaz
+            #Obtiene el array para el modelo y la imagen para mostrar en la interfaz
+            self.array, preview = read_image_file(filepath)
             preview = preview.resize((250, 250), Image.Resampling.LANCZOS)
             self.input_photo = ImageTk.PhotoImage(preview)
             self.image_panel.delete("1.0", END)
             self.image_panel.image_create(END, image=self.input_photo)
-            self.predict_button["state"] = "normal"   #Habilita el boton solo cuando la imagen esta cargada
+            self.predict_button["state"] = "normal"   #Habilita el botón con la imagen cargada
 
-    def run_model(self):     #Al presionar predecir 
+    def run_model(self):
+        """Ejecuta la predicción y muestra el resultado con su heatmap."""
         if self.model is None:
             self.model = model_fun()
         self.diagnosis, self.probability, heatmap = predict(self.array, self.model)
@@ -111,16 +119,19 @@ class App:                      #Interfaz
         self.probability_text.delete("1.0", END)
         self.probability_text.insert(END, f"{self.probability:.2f}%")
 
-    def save_results_csv(self):     #Guarda el resultado de la predicción 
+    def save_results_csv(self):
+        """Guarda el resultado de la predicción en el historial."""
         save_result_csv(self.id_entry.get(), self.diagnosis, self.probability)
         showinfo(title="Guardar", message="Los datos se guardaron con éxito.")
 
-    def create_pdf(self):   #Genera el reporte a partir de la ventana
+    def create_pdf(self):
+        """Genera el reporte PDF a partir de la ventana."""
         generate_pdf_report(self.root, self.report_id)
-        self.report_id += 1     #Aumenta el núemro del reporte
+        self.report_id += 1     #Aumenta el número del reporte
         showinfo(title="PDF", message="El PDF fue generado con éxito.")
 
-    def delete(self):     #Limpia la informaión de la interfaz
+    def delete(self):
+        """Limpia la información de la interfaz previa confirmación."""
         answer = askokcancel(
             title="Confirmación", message="Se borrarán todos los datos.", icon=WARNING
         )
@@ -136,6 +147,7 @@ class App:                      #Interfaz
 
 
 def main():
+    """Arranca la aplicación."""
     app = App()
     app.root.mainloop()
 
