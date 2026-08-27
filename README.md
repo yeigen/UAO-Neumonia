@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/python-3.13-blue)
 ![TensorFlow](https://img.shields.io/badge/tensorflow--cpu-2.21-orange)
 ![uv](https://img.shields.io/badge/gestor-uv-purple)
-![Tests](https://img.shields.io/badge/pytest-50%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/pytest-120%20passed-brightgreen)
 ![License](https://img.shields.io/badge/licencia-MIT-green)
 
 Herramienta de apoyo al diagnóstico médico de neumonía mediante Deep Learning. Procesa imágenes radiográficas de tórax (DICOM o JPG/PNG) y las clasifica en tres categorías:

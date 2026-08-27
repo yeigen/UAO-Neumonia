@@ -51,3 +51,37 @@ def test_predict_works_with_trained_model(bgr_image):
     assert label in CLASS_LABELS.values()
     assert 0.0 <= probability <= 100.0
     assert heatmap.shape == (512, 512, 3)
+
+
+def test_predict_returns_three_values(tiny_pneumonia_model, bgr_image):
+    result = predict(bgr_image, tiny_pneumonia_model)
+    assert len(result) == 3
+
+
+def test_predict_label_is_string(tiny_pneumonia_model, bgr_image):
+    label, _, _ = predict(bgr_image, tiny_pneumonia_model)
+    assert isinstance(label, str)
+
+
+def test_predict_probability_is_float(tiny_pneumonia_model, bgr_image):
+    _, probability, _ = predict(bgr_image, tiny_pneumonia_model)
+    assert isinstance(probability, float)
+
+
+def test_predict_heatmap_is_numpy_array(tiny_pneumonia_model, bgr_image):
+    _, _, heatmap = predict(bgr_image, tiny_pneumonia_model)
+    assert isinstance(heatmap, np.ndarray)
+
+
+def test_predict_is_deterministic(tiny_pneumonia_model, bgr_image):
+    first_label, first_probability, _ = predict(bgr_image, tiny_pneumonia_model)
+    second_label, second_probability, _ = predict(bgr_image, tiny_pneumonia_model)
+    assert first_label == second_label
+    assert first_probability == pytest.approx(second_probability)
+
+
+def test_predict_accepts_uniform_image(tiny_pneumonia_model):
+    image = np.full((128, 128, 3), 90, dtype=np.uint8)
+    label, probability, heatmap = predict(image, tiny_pneumonia_model)
+    assert label in CLASS_LABELS.values()
+    assert heatmap.shape == (512, 512, 3)

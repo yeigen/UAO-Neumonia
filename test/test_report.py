@@ -76,3 +76,75 @@ def test_generate_pdf_report_numbers_reports(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
     assert generate_pdf_report(FakeWidget(), 3) == "reports/Reporte3.pdf"
     assert Path("reports/Reporte3.jpg").exists()
+
+
+def test_save_result_csv_uses_dash_delimiter(tmp_path):
+    path = tmp_path / "history.csv"
+    save_result_csv("77", "normal", 88.0, path)
+    assert path.read_text().strip().split("-") == ["77", "normal", "88.00%"]
+
+
+def test_save_result_csv_formats_two_decimals(tmp_path):
+    path = tmp_path / "history.csv"
+    save_result_csv("1", "viral", 5.0, path)
+    assert path.read_text().strip().endswith("5.00%")
+
+
+def test_save_result_csv_rounds_probability(tmp_path):
+    path = tmp_path / "history.csv"
+    save_result_csv("1", "viral", 95.999, path)
+    assert path.read_text().strip().endswith("96.00%")
+
+
+def test_save_result_csv_accepts_string_path(tmp_path):
+    path = tmp_path / "history.csv"
+    save_result_csv("5", "normal", 50.0, str(path))
+    assert path.exists()
+
+
+def test_save_result_csv_preserves_existing_content(tmp_path):
+    path = tmp_path / "history.csv"
+    path.write_text("0-bacteriana-10.00%\n")
+    save_result_csv("1", "viral", 20.0, path)
+    lines = path.read_text().strip().splitlines()
+    assert lines == ["0-bacteriana-10.00%", "1-viral-20.00%"]
+
+
+def test_save_result_csv_writes_one_row_per_call(tmp_path):
+    path = tmp_path / "history.csv"
+    for patient in ["1", "2", "3"]:
+        save_result_csv(patient, "normal", 60.0, path)
+    assert len(path.read_text().strip().splitlines()) == 3
+
+
+def test_save_result_csv_allows_empty_patient_id(tmp_path):
+    path = tmp_path / "history.csv"
+    save_result_csv("", "normal", 90.0, path)
+    assert path.read_text().strip() == "-normal-90.00%"
+
+
+def test_capture_window_returns_the_output_path(monkeypatch, tmp_path):
+    install_fake_screenshot(monkeypatch)
+    output = str(tmp_path / "capture.jpg")
+    assert capture_window(FakeWidget(), output) == output
+
+
+def test_capture_window_saves_image_with_widget_size(monkeypatch, tmp_path):
+    install_fake_screenshot(monkeypatch)
+    output = str(tmp_path / "capture.jpg")
+    capture_window(FakeWidget(), output)
+    assert Image.open(output).size == (300, 200)
+
+
+def test_generate_pdf_report_creates_both_files(monkeypatch, tmp_path):
+    install_fake_screenshot(monkeypatch)
+    monkeypatch.chdir(tmp_path)
+    generate_pdf_report(FakeWidget(), 5)
+    assert Path("reports/Reporte5.jpg").exists()
+    assert Path("reports/Reporte5.pdf").exists()
+
+
+def test_generate_pdf_report_returns_string_path(monkeypatch, tmp_path):
+    install_fake_screenshot(monkeypatch)
+    monkeypatch.chdir(tmp_path)
+    assert isinstance(generate_pdf_report(FakeWidget(), 0), str)

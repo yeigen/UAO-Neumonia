@@ -1,8 +1,11 @@
+import inspect
+
 import numpy as np
 import pytest
 import tensorflow as tf
 from conftest import requires_trained_model
 
+from src.config import CONV_LAYER_NAME, HEATMAP_INTENSITY
 from src.grad_cam import compute_heatmap, grad_cam, overlay_heatmap
 from src.load_model import model_fun
 
@@ -61,3 +64,54 @@ def test_grad_cam_produces_overlay_with_trained_model():
     overlay = grad_cam(array, model_fun())
     assert overlay.shape == (512, 512, 3)
     assert overlay.dtype == np.uint8
+
+
+def test_compute_heatmap_returns_numpy_array(tiny_cnn, batch):
+    assert isinstance(compute_heatmap(tiny_cnn, batch, "last_conv"), np.ndarray)
+
+
+def test_compute_heatmap_is_two_dimensional(tiny_cnn, batch):
+    assert compute_heatmap(tiny_cnn, batch, "last_conv").ndim == 2
+
+
+def test_compute_heatmap_dtype_is_float(tiny_cnn, batch):
+    heatmap = compute_heatmap(tiny_cnn, batch, "last_conv")
+    assert np.issubdtype(heatmap.dtype, np.floating)
+
+
+def test_compute_heatmap_is_deterministic(tiny_cnn, batch):
+    first = compute_heatmap(tiny_cnn, batch, "last_conv")
+    second = compute_heatmap(tiny_cnn, batch, "last_conv")
+    assert np.allclose(first, second)
+
+
+def test_compute_heatmap_default_layer_matches_config():
+    default = inspect.signature(compute_heatmap).parameters["layer_name"].default
+    assert default == CONV_LAYER_NAME
+
+
+def test_overlay_heatmap_zero_intensity_returns_channel_swapped_image():
+    heatmap = np.zeros((30, 30), dtype=np.float32)
+    image = np.random.default_rng(5).integers(0, 255, (64, 64, 3), dtype=np.uint8)
+    overlay = overlay_heatmap(heatmap, image, intensity=0)
+    assert np.array_equal(overlay, image[:, :, ::-1])
+
+
+def test_overlay_heatmap_saturates_at_255():
+    heatmap = np.ones((30, 30), dtype=np.float32)
+    image = np.full((64, 64, 3), 250, dtype=np.uint8)
+    overlay = overlay_heatmap(heatmap, image)
+    assert overlay.max() == 255
+    assert overlay.min() >= 250
+
+
+def test_overlay_heatmap_accepts_custom_intensity():
+    heatmap = np.linspace(0, 1, 900, dtype=np.float32).reshape(30, 30)
+    image = np.full((64, 64, 3), 100, dtype=np.uint8)
+    overlay = overlay_heatmap(heatmap, image, intensity=0.5)
+    assert overlay.shape == (64, 64, 3)
+
+
+def test_overlay_heatmap_default_intensity_matches_config():
+    default = inspect.signature(overlay_heatmap).parameters["intensity"].default
+    assert default == HEATMAP_INTENSITY
