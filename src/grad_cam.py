@@ -20,7 +20,7 @@ def compute_heatmap(model, batch, layer_name=CONV_LAYER_NAME):
     heatmap = tf.maximum(heatmap, 0)  #Quitar valores negativos 
     max_value = tf.reduce_max(heatmap)   #Maximo valor dentro de heatmap
     if max_value > 0:
-        heatmap = heatmap / max_value    #Normalización del heatmap [0 - 1]
+        heatmap = heatmap / max_value    #Normalización del heatmap [0:1]
     return heatmap.numpy()
 
 #Poner el mapa de calor sobre la radiografia 
