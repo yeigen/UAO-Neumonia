@@ -9,8 +9,8 @@ from src.read_img import read_image_file
 from src.report import generate_pdf_report, save_result_csv
 
 
-class App:
-    def __init__(self):
+class App:                      #Interfaz
+    def __init__(self):            #Construtor con configuración de la ventana 
         self.root = Tk()
         self.root.title("Herramienta para la detección rápida de neumonía")
         self.root.geometry("815x560")
@@ -73,13 +73,13 @@ class App:
         self.heatmap_panel.place(x=500, y=90)
 
         self.id_entry.focus_set()
-
+        #Variables para almacenar el modelo, el array de la imagen, identificador del reporte
         self.model = None
         self.array = None
         self.report_id = 0
 
     def load_img_file(self):
-        filepath = filedialog.askopenfilename(
+        filepath = filedialog.askopenfilename(    #Abre el explorador de archivos 
             initialdir="/",
             title="Select image",
             filetypes=(
@@ -90,14 +90,14 @@ class App:
             ),
         )
         if filepath:
-            self.array, preview = read_image_file(filepath)
+            self.array, preview = read_image_file(filepath)     #Obtiene el array para el modelo y la imagen Para mostrar en al interfaz
             preview = preview.resize((250, 250), Image.Resampling.LANCZOS)
             self.input_photo = ImageTk.PhotoImage(preview)
             self.image_panel.delete("1.0", END)
             self.image_panel.image_create(END, image=self.input_photo)
-            self.predict_button["state"] = "normal"
+            self.predict_button["state"] = "normal"   #Habilita el boton solo cuando la imagen esta cargada
 
-    def run_model(self):
+    def run_model(self):     #Al presionar predecir 
         if self.model is None:
             self.model = model_fun()
         self.diagnosis, self.probability, heatmap = predict(self.array, self.model)
@@ -111,16 +111,16 @@ class App:
         self.probability_text.delete("1.0", END)
         self.probability_text.insert(END, f"{self.probability:.2f}%")
 
-    def save_results_csv(self):
+    def save_results_csv(self):     #Guarda el resultado de la predicción 
         save_result_csv(self.id_entry.get(), self.diagnosis, self.probability)
         showinfo(title="Guardar", message="Los datos se guardaron con éxito.")
 
-    def create_pdf(self):
+    def create_pdf(self):   #Genera el reporte a partir de la ventana
         generate_pdf_report(self.root, self.report_id)
-        self.report_id += 1
+        self.report_id += 1     #Aumenta el núemro del reporte
         showinfo(title="PDF", message="El PDF fue generado con éxito.")
 
-    def delete(self):
+    def delete(self):     #Limpia la informaión de la interfaz
         answer = askokcancel(
             title="Confirmación", message="Se borrarán todos los datos.", icon=WARNING
         )
