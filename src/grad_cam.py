@@ -23,13 +23,13 @@ def compute_heatmap(model, batch, layer_name=CONV_LAYER_NAME):
         heatmap = heatmap / max_value    #Normalización del heatmap [0 - 1]
     return heatmap.numpy()
 
-
-def overlay_heatmap(heatmap, image, intensity=HEATMAP_INTENSITY):
-    resized = cv2.resize(heatmap, (image.shape[1], image.shape[0]))
-    colored = cv2.applyColorMap((resized * 255).astype(np.uint8), cv2.COLORMAP_JET)
-    transparency = (colored * intensity).astype(np.uint8)
+#Poner el mapa de calor sobre la radiografia 
+def overlay_heatmap(heatmap, image, intensity=HEATMAP_INTENSITY): 
+    resized = cv2.resize(heatmap, (image.shape[1], image.shape[0]))   #Redimensionar heatmap para tener las mismas dimensiones de la imagen 
+    colored = cv2.applyColorMap((resized * 255).astype(np.uint8), cv2.COLORMAP_JET)     # Convertir mapa normalizado [0,1] a 8 bits (0,255])
+    transparency = (colored * intensity).astype(np.uint8)  #Modifica la intensidad del heatmap
     combined = cv2.add(transparency, image)
-    return combined[:, :, ::-1]
+    return combined[:, :, ::-1]   #convertir a RGB para visualización 
 
 
 def grad_cam(array, model=None):
