@@ -33,8 +33,8 @@ def overlay_heatmap(heatmap, image, intensity=HEATMAP_INTENSITY):
 
 
 def grad_cam(array, model=None):
-    if model is None:
+    if model is None:                      #Si no se proporciona un modelo se cargara automáticamente 
         model = model_fun()
-    heatmap = compute_heatmap(model, preprocess(array))
+    heatmap = compute_heatmap(model, preprocess(array))  #Preprocesa la imagen y luego calcula el mapa gradcam
     resized_input = cv2.resize(array, (IMG_SIZE, IMG_SIZE))
-    return overlay_heatmap(heatmap, resized_input)
+    return overlay_heatmap(heatmap, resized_input)           #Sobrepone el heatmap sobre la imagen redimensionada para mostrar un resultado visual 
